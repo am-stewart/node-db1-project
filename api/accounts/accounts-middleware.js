@@ -1,16 +1,19 @@
-const yup = require('yup')
 const Accounts = require('./accounts-model');
 
-const payloadSchema = yup.object ({
-  name: yup.string().trim().required('name of account must be between 3 and 100').min(3).max(100),
-  budget: yup.number().required('budget of account must be a number')
-})
-
 exports.checkAccountPayload = async (req, res, next) => {
+  const { name, budget } = req.body;
+  if (name === undefined || budget === undefined) {
+    res.status(400).json({ message: 'name and budget are required' })
+  } else if (name.trim().length < 3 || name.trim().length > 100) {
+    res.status(400).json({ message: 'name of account must be between 3 and 100' })
+  } else if (typeof budget !== 'number') {
+    res.status(400).json({ message: 'budget of account must be a number' })
+  } else if (budget < 0 || budget > 1000000) {
+    res.status(400).json({ message: 'budget of account is too large or too small'})
+  } else {
+     next();
   }
-  // DO YOUR MAGIC
-  // Note: you can either write "manual" validation logic
-  // or use the Yup library (not currently installed)
+}
 
 exports.checkAccountNameUnique = (req, res, next) => {
   // DO YOUR MAGIC
