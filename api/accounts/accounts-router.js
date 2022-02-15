@@ -35,7 +35,8 @@ router.put('/:id', checkAccountId, checkAccountPayload, async (req, res, next) =
 
 router.delete('/:id', checkAccountId, async (req, res, next) => {
   try {
-
+    const deletedAccount = await Accounts.deleteById(req.params.id)
+    res.json(deletedAccount)
   } catch(err) {
     next(err)
   }

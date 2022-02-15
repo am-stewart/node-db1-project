@@ -20,7 +20,7 @@ async function updateById (id, account) {
 
 async function deleteById (id) {
   let result = await getById(id);
-  await db('accounts').where({ id: id }).del();
+  await db('accounts').where('id', id).first().del();
   return result;
 }
 
