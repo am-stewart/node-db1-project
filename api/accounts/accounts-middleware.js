@@ -18,10 +18,11 @@ exports.checkAccountPayload = async (req, res, next) => {
 
 exports.checkAccountNameUnique = async (req, res, next) => {
   try {
-    const existingAccounts = await db('accounts').where('name', req.body.name).first()
+    const existingAccounts = await db('accounts').where('name', req.body.name.trim()).first()
     if (existingAccounts) {
       res.status(400).json({ message: 'that name is taken'})
     } else {
+      req.body.name = req.body.name.trim();
       next();
     }
   } catch(err) {
